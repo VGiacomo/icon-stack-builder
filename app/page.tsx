@@ -1,5 +1,5 @@
-'use client';
-import { useState } from "react";
+'use client'
+import { useState, useMemo, ChangeEvent } from "react";
 import { Grid2, ListItemIcon, TextField } from "@mui/material";
 import Image from "next/image";
 import { svgs } from "../utils/importSvgs";
@@ -7,17 +7,20 @@ import { Key } from "react";
 
 export default function Home() {
   // State to keep track of the search query
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   // Function to handle search query changes
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
-console.log(svgs, "svgs");
 
-  // Filter the SVG icons based on the search query
-  const filteredSvgs = svgs.filter((svg: { default: string; }) =>
-    svg.default?.src.toLowerCase().includes(searchQuery.toLowerCase())
+  // Use useMemo to memoize filtered results to avoid recalculating on every render
+  const filteredSvgs = useMemo(
+    () =>
+      svgs.filter((svg: { default: { src: string; }; }) =>
+        svg.default?.src.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
+    [searchQuery, svgs]
   );
 
   return (
@@ -52,17 +55,24 @@ console.log(svgs, "svgs");
           columns={{ xs: 4, sm: 8, md: 12 }}
         >
           {filteredSvgs.map(
-            (svg: { default: string | undefined }, index: Key | null | undefined) => (
-              <ListItemIcon key={index} xs={2} sm={4} md={6}>
-                <Image
-                  className="large-icon"
-                  src={svg.default}
-                  alt={`SVG ${index + 1}`}
-                  width={48}
-                  height={48}
-                />
-              </ListItemIcon>
-            )
+            (
+              svg: { default: { src: string; }; },
+              index: Key | null | undefined
+            ) => {
+              const filename = svg.default?.src.split("/").pop()?.replace(".svg", "") || `SVG ${index + 1}`;
+              return (
+                <ListItemIcon key={index} xs={2} sm={4} md={6}>
+                  <Image
+                    className="large-icon"
+                    src={svg.default || ""}
+                    alt={filename}
+                    width={48}
+                    height={48}
+                    loading="lazy" // Enable lazy loading for performance boost
+                  />
+                </ListItemIcon>
+              );
+            }
           )}
         </Grid2>
       </main>
