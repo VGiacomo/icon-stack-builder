@@ -1,9 +1,25 @@
+'use client';
+import { useState } from "react";
 import { Grid2, ListItemIcon, TextField } from "@mui/material";
 import Image from "next/image";
 import { svgs } from "../utils/importSvgs";
 import { Key } from "react";
 
 export default function Home() {
+  // State to keep track of the search query
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Function to handle search query changes
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+console.log(svgs, "svgs");
+
+  // Filter the SVG icons based on the search query
+  const filteredSvgs = svgs.filter((svg: { default: string; }) =>
+    svg.default?.src.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-top justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
@@ -19,9 +35,7 @@ export default function Home() {
           <li className="mb-2">
             Search and select the technology (icons) you are familiar with.{" "}
           </li>
-          <li>
-            Export your stack as a beautiful React component or simple css.
-          </li>
+          <li>Export your stack as a beautiful React component or simple css.</li>
         </ol>
         <TextField
           className="w-full dark:invert"
@@ -29,22 +43,23 @@ export default function Home() {
           label="Search icons"
           type="search"
           variant="filled"
+          value={searchQuery}
+          onChange={handleSearchChange} // Add this to update the search query
         />
         <Grid2
           container
           spacing={{ xs: 2, md: 3 }}
           columns={{ xs: 4, sm: 8, md: 12 }}
         >
-          {svgs.map(
-            (
-              svg: { default: string | undefined },
-              index: Key | null | undefined
-            ) => (
+          {filteredSvgs.map(
+            (svg: { default: string | undefined }, index: Key | null | undefined) => (
               <ListItemIcon key={index} xs={2} sm={4} md={6}>
                 <Image
                   className="large-icon"
                   src={svg.default}
                   alt={`SVG ${index + 1}`}
+                  width={48}
+                  height={48}
                 />
               </ListItemIcon>
             )
