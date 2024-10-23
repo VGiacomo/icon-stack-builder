@@ -52,10 +52,6 @@ export default function Home() {
           priority
         /> */}
         {/* Display selected icons */}
-        <div className="w-full mt-8">
-          <h3 className="text-lg font-semibold mb-4">Selected Icons:</h3>
-          <SelectedIconsDisplay selectedIcons={selectedIcons} />
-        </div>
         <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2">
             Search and select the technology (icons) you are familiar with.{" "}
@@ -64,6 +60,9 @@ export default function Home() {
             Export your stack as a beautiful React component or simple css.
           </li>
         </ol>
+        <div className="w-full mt-8">
+          <SelectedIconsDisplay selectedIcons={selectedIcons} />
+        </div>
         <TextField
           className="w-full dark:invert"
           id="filled-search"
