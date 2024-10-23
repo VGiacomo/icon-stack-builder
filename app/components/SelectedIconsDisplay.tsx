@@ -2,6 +2,7 @@ import { FC, Key } from "react";
 import Image from "next/image";
 import { svgs } from "@/utils/importSvgs";
 import { BackgroundGradient } from "./ui/background-gradient";
+import Link from "next/link";
 
 interface SelectedIconsDisplayProps {
   selectedIcons: string[];
@@ -39,7 +40,7 @@ const SelectedIconsDisplay: FC<SelectedIconsDisplayProps> = ({
       <div className="w-auto max-w-fit mt-4">
         <BackgroundGradient className="justify-self-center rounded-[22px] bg-white dark:bg-zinc-900">
           <button className="rounded-full justify-items-center pl-3 pr-3 py-1 max-w-sm sm:p-2 text-white flex items-center font-bold">
-            <span>Create your own stack</span>
+            <Link href="/craft">Create your stack</Link>
           </button>
         </BackgroundGradient>
       </div>
